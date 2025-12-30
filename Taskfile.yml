@@ -1,0 +1,52 @@
+version: '3'
+
+tasks:
+  fmt:
+    desc: Format Go code
+    cmds:
+      - go fmt ./...
+
+  vet:
+    desc: Run go vet
+    cmds:
+      - go vet ./...
+
+  scan:
+    desc: Run gosec security scanner
+    cmds:
+      - gosec ./...
+
+  revive:
+    desc: Run revive linter
+    cmds:
+      - revive ./...
+
+  lint:
+    desc: Run all linters
+    cmds:
+      - task: fmt
+      - task: vet
+      - task: scan
+      - task: revive
+
+  build:
+    desc: Build the server binary
+    cmds:
+      - go build -ldflags="-s -w" -o bin/server ./cmd/server
+
+  run:
+    desc: Run the server
+    cmds:
+      - go run ./cmd/server
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test -v -race ./...
+
+  test-cover:
+    desc: Run tests with coverage
+    cmds:
+      - go test -v -coverprofile=coverage.txt -covermode=atomic ./...
+      - go tool cover -func=coverage.txt
+
