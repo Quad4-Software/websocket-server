@@ -1,12 +1,11 @@
 # WS Relay Server
 
-A production-ready WebSocket relay server designed for WASM applications. This server acts as a transport layer for WebSocket connections, providing echo, broadcast, and logging modes.
+A WebSocket relay server.
 
 ## Features
 
-- WebSocket relay server with multiple operation modes
+- WebSocket relay server with multiple operation modes: echo, broadcast, and log
 - Rate limiting per connection and global
-- CORS and CSP support
 - Reverse proxy support (X-Forwarded-* headers)
 - WSS enforcement when domain is configured
 - Privacy-focused: no IP address logging
@@ -44,7 +43,7 @@ All environment variables can be overridden with command-line flags:
 
 ### Precedence
 
-Configuration precedence: Environment Variables → Command-Line Flags → Defaults
+Configuration precedence: Environment Variables > Command-Line Flags > Defaults
 
 ### Examples
 
@@ -72,11 +71,11 @@ export DOMAIN=example.com
 
 ### Prerequisites
 
-- Go 1.21 or later
-- gosec (for security scanning)
-- revive (for linting)
+- Go 1.25.5 or later
 
 ### Running Linters
+
+Requires: revive, gosec
 
 ```bash
 task lint
