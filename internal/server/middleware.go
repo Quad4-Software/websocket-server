@@ -47,12 +47,14 @@ func (s *Server) cspMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 func (s *Server) forceWSSMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Header.Get("X-Forwarded-Proto") == "http" && s.domain != "" {
-			http.Redirect(w, r, "https://"+s.domain+r.RequestURI, http.StatusMovedPermanently)
+		if s.domain == "" {
+			next(w, r)
 			return
 		}
 
-		if r.TLS == nil && s.domain != "" {
+		isHTTPS := r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https"
+
+		if !isHTTPS {
 			http.Redirect(w, r, "https://"+s.domain+r.RequestURI, http.StatusMovedPermanently)
 			return
 		}
