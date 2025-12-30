@@ -157,14 +157,6 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if s.domain != "" {
-		isWSS := r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https"
-		if !isWSS {
-			http.Error(w, "WSS required", http.StatusBadRequest)
-			return
-		}
-	}
-
 	upgrader := s.getUpgrader()
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
