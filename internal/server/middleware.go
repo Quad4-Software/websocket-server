@@ -9,19 +9,20 @@ import (
 func (s *Server) corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
-		if s.domain != "" {
-			if origin != "" && !strings.HasSuffix(origin, s.domain) {
-				http.Error(w, "Forbidden", http.StatusForbidden)
-				return
-			}
-			w.Header().Set("Access-Control-Allow-Origin", "https://"+s.domain)
-		} else {
-			if origin != "" {
+
+		if origin != "" {
+			if s.domain != "" {
+				if strings.HasSuffix(origin, s.domain) {
+					w.Header().Set("Access-Control-Allow-Origin", origin)
+				} else {
+					w.Header().Set("Access-Control-Allow-Origin", "https://"+s.domain)
+				}
+			} else {
 				w.Header().Set("Access-Control-Allow-Origin", origin)
 			}
 		}
 
-		w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS, POST")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
