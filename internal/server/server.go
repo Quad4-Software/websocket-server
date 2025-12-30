@@ -320,11 +320,7 @@ func (s *Server) Shutdown(ctx context.Context) error {
 func (s *Server) getUpgrader() websocket.Upgrader {
 	return websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
-			if s.domain == "" {
-				return true
-			}
-			origin := r.Header.Get("Origin")
-			return origin != "" && (origin == "https://"+s.domain || origin == "wss://"+s.domain)
+			return true
 		},
 	}
 }
