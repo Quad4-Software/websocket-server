@@ -1,14 +1,13 @@
 # Websocket Server
 
-A WebSocket server.
+A WebSocket serveri in Go.
 
 ## Features
 
 - WebSocket relay server with multiple operation modes: echo, broadcast, and log
 - Rate limiting per connection and global
 - Reverse proxy support (X-Forwarded-* headers)
-- WSS enforcement when domain is configured
-- Privacy-focused: no IP address logging
+- Privacy-focused: no IP address logging of connecting clients
 - Configurable via environment variables or command-line flags
 
 ## Installation
