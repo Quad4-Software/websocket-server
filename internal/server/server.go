@@ -98,21 +98,12 @@ func (s *Server) broadcast(data []byte, exclude *websocket.Conn) {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
-	if len(data) > 0xFFFFFFFF-4 {
-		return
-	}
-
-	packetLen := uint32(len(data)) // #nosec G115
-	packet := make([]byte, 4+len(data))
-	binary.BigEndian.PutUint32(packet[:4], packetLen)
-	copy(packet[4:], data)
-
 	for conn, info := range s.clients {
 		if conn == exclude {
 			continue
 		}
 		select {
-		case info.send <- packet:
+		case info.send <- data:
 		default:
 			// If buffer is full, drop connection or message.
 			// For high-performance relay, we drop the message or the slow client.
@@ -201,16 +192,7 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		if len(data) < 4 {
-			continue
-		}
-
-		packetLen := binary.BigEndian.Uint32(data[:4])
-		if len(data) < int(packetLen)+4 {
-			continue
-		}
-
-		packet := data[4 : 4+packetLen]
+		packet := data
 
 		switch s.mode {
 		case "echo":
@@ -228,17 +210,8 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) echoPacket(info *ClientInfo, packet []byte) {
-	if len(packet) > 0xFFFFFFFF-4 {
-		return
-	}
-
-	packetLen := uint32(len(packet)) // #nosec G115
-	response := make([]byte, 4+len(packet))
-	binary.BigEndian.PutUint32(response[:4], packetLen)
-	copy(response[4:], packet)
-
 	select {
-	case info.send <- response:
+	case info.send <- packet:
 	default:
 		// Drop message if buffer full
 	}
