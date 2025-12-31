@@ -1,6 +1,6 @@
-# WS Relay Server
+# Websocket Server
 
-A WebSocket relay server.
+A WebSocket server.
 
 ## Features
 
