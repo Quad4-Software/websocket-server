@@ -1,6 +1,6 @@
 # Websocket Server
 
-A WebSocket serveri in Go.
+A WebSocket server in Go.
 
 ## Features
 
