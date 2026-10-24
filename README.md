@@ -70,7 +70,7 @@ export DOMAIN=example.com
 
 ### Prerequisites
 
-- Go 1.27.1 or later
+- Go 1.27.3 or later
 
 ### Running Linters
 

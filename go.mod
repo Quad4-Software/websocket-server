@@ -1,6 +1,6 @@
 module git.quad4.io/Networks/ws-relay
 
-go 1.27.1
+go 1.27.3
 
 require (
 	github.com/gorilla/websocket v1.5.3
